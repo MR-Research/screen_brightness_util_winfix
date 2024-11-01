@@ -23,4 +23,8 @@ class ScreenBrightnessUtil {
   /// `Windows`, get the brightness of the screen the app window located
   Stream<double> getBrightnessChangeStream() =>
       _platformChannel.onBrightnessChange();
+
+  Future<String?> getPlatformVersion() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
 }

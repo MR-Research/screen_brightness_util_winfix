@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:screen_brightness_util/screen_brightness_util.dart';
 
 void main() {
@@ -8,35 +9,42 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late final ScreenBrightnessUtil _screenBrightnessUtil =
-      ScreenBrightnessUtil();
-  late StreamSubscription ss;
-  String _info = "";
-  double _sliderBrightness = 0;
+  String _platformVersion = 'Unknown';
+  final _screenBrightnessUtilPlugin = ScreenBrightnessUtil();
 
   @override
   void initState() {
-    ss = _screenBrightnessUtil.getBrightnessChangeStream().listen((brightness) {
-      _updateInfo(brightness);
-    });
-    _screenBrightnessUtil.getBrightness().then((brightness) {
-      _updateInfo(brightness);
-    });
-
     super.initState();
+    initPlatformState();
   }
 
-  @override
-  void dispose() {
-    ss.cancel();
-    super.dispose();
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      platformVersion =
+          await _screenBrightnessUtilPlugin.getPlatformVersion() ?? 'Unknown platform version';
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
   }
 
   @override
@@ -46,51 +54,10 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 36,
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 24,
-                ),
-                Text(
-                  _info,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Slider(
-                value: _sliderBrightness,
-                onChanged: (setBrightness) {
-                  _screenBrightnessUtil.setBrightness(setBrightness);
-                  setState(() {
-                    _sliderBrightness = setBrightness;
-                  });
-                }),
-          ],
+        body: Center(
+          child: Text('Running on: $_platformVersion\n'),
         ),
       ),
     );
-  }
-
-  void _updateInfo(double brightness) {
-    setState(() {
-      bool error = brightness < 0;
-      if (error) {
-        _info = "OOPS, something wrong!";
-        return;
-      } else {
-        _info = "Brightness: $brightness";
-      }
-      _sliderBrightness = brightness;
-    });
   }
 }
