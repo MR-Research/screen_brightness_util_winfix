@@ -10,10 +10,26 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  screen_brightness_util_platform_interface: ^0.0.2
-  screen_brightness_util_android: ^0.0.2
-  screen_brightness_util_ios: ^0.0.2
-  screen_brightness_util_windows: ^0.0.2
+  screen_brightness_util_platform_interface:
+    git:
+      url: https://github.com/MR-Research/screen_brightness_util_winfix.git
+      ref: fix_windows_brightness
+      path: screen_brightness_util_platform_interface
+  screen_brightness_util_android:
+    git:
+      url: https://github.com/MR-Research/screen_brightness_util_winfix.git
+      ref: fix_windows_brightness
+      path: screen_brightness_util_android
+  screen_brightness_util_ios:
+    git:
+      url: https://github.com/MR-Research/screen_brightness_util_winfix.git
+      ref: fix_windows_brightness
+      path: screen_brightness_util_ios
+  screen_brightness_util_windows:
+    git:
+      url: https://github.com/MR-Research/screen_brightness_util_winfix.git
+      ref: fix_windows_brightness
+      path: screen_brightness_util_windows
 
 dev_dependencies:
   flutter_test:
