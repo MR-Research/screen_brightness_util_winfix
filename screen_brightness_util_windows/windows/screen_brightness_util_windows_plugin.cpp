@@ -201,14 +201,7 @@ namespace screen_brightness_util_windows {
             goto cleanup;
         }
 
-        // Initialize COM security settings
-        hr = CoInitializeSecurity(NULL, -1, NULL, NULL,
-            RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-            RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,
-            EOAC_SECURE_REFS, //change to EOAC_NONE if you change dwAuthnLevel to RPC_C_AUTHN_LEVEL_NONE
-            NULL);
-        if (FAILED(hr))
+        if (FAILED(hr_init))
         {
             printf("CoInitializeSecurity returned 0x%x:", hr);
             goto cleanup;
