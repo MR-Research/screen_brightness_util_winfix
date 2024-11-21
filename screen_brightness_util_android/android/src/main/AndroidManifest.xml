@@ -1,3 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="zyz.flutter.plugin.screen_brightness_util_android">
-</manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
