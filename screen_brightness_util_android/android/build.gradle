@@ -2,7 +2,7 @@ group 'zyz.flutter.plugin.screen_brightness_util_android'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.0.20'
+    ext.kotlin_version = '2.0.21'
     repositories {
         google()
         mavenCentral()
